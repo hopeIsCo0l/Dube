@@ -1,0 +1,140 @@
+<resources>
+    <string name="customers">ደንበኞች</string>
+    <string name="back">ተመለስ</string>
+    <string name="choose_customer">ሂሳቦቻቸውን ለማስተዳደር ደንበኛ ይምረጡ።</string>
+    <string name="register_customer">ደንበኛ ይመዝግቡ</string>
+    <string name="tabs">ሂሳቦች</string>
+    <string name="no_tabs">ገና ሂሳብ የለም። ዕቃዎችን ለመጨመር ሂሳብ ይክፈቱ።</string>
+    <string name="opening">በመክፈት ላይ…</string>
+    <string name="open_tab">ሂሳብ ይክፈቱ</string>
+    <string name="no_items">ገና ዕቃዎች የሉም</string>
+    <string name="add_item_help">ዕቃ፣ ብዛትና የአንዱን ዋጋ ያስገቡ። ድምሩ በራስ-ሰር ይሰላል።</string>
+    <string name="tap_edit">ለማስተካከል ይንኩ</string>
+    <string name="add_item">ዕቃ ይጨምሩ</string>
+    <string name="tab_name">የሂሳብ ስም</string>
+    <string name="tab_example">ለምሳሌ፦ የሳምንቱ ግዢ</string>
+    <string name="date_help">የተከፈተበት ቀን በጎርጎርዮሳዊና በኢትዮጵያ አቆጣጠር ይታያል።</string>
+    <string name="open_tab_confirm">ሂሳብ ክፈት</string>
+    <string name="cancel">ሰርዝ</string>
+    <string name="customer_name">የደንበኛ ስም *</string>
+    <string name="name_required">ስም ማስገባት ግዴታ ነው።</string>
+    <string name="phone">ስልክ ቁጥር (አማራጭ)</string>
+    <string name="memo">ማስታወሻ (አማራጭ)</string>
+    <string name="saving">በማስቀመጥ ላይ…</string>
+    <string name="register">መዝግብ</string>
+    <string name="edit_item">ዕቃ ያስተካክሉ</string>
+    <string name="item_name">የዕቃ ስም</string>
+    <string name="quantity">ብዛት</string>
+    <string name="quantity_help">ከ0 በላይ፣ እስከ 2 የአስርዮሽ ቦታዎች</string>
+    <string name="unit_price">የአንዱ ዋጋ</string>
+    <string name="price_help">0 ወይም ከዚያ በላይ፣ እስከ 2 የአስርዮሽ ቦታዎች</string>
+    <string name="delete_item">ዕቃ ሰርዝ</string>
+    <string name="save_item">ዕቃ አስቀምጥ</string>
+    <string name="delete_question">ዕቃው ይሰረዝ?</string>
+    <string name="delete">ሰርዝ</string>
+    <string name="load_error">መዝገቦቹን መጫን አልተቻለም። እንደገና ለመሞከር መተግበሪያውን ዳግም ይክፈቱ።</string>
+    <string name="save_error">ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።</string>
+    <string name="opened_date">የተከፈተው፦ %1$s</string>
+    <string name="unknown_date">ነባር ዕቃዎች · የተከፈተበት ቀን አይታወቅም</string>
+    <string name="customer_summary">%1$d ሂሳቦች · ጠቅላላ %2$s</string>
+    <string name="tab_summary">%1$d ዕቃዎች · ጠቅላላ %2$s</string>
+    <string name="grand_total">ጠቅላላ ድምር · %1$d ሂሳቦች</string>
+    <string name="tab_total">የሂሳቡ ድምር · %1$d ዕቃዎች</string>
+    <string name="item_number">ዕቃ %1$d</string>
+    <string name="quantity_value">ብዛት፦ %1$s</string>
+    <string name="price_value">የአንዱ ዋጋ፦ %1$s</string>
+    <string name="total_value">ድምር፦ %1$s</string>
+    <string name="delete_message">%1$s ከዚህ ሂሳብ ይሰረዝ?</string>
+    <string name="phone_value">ስልክ፦ %1$s</string>
+    <string name="memo_value">ማስታወሻ፦ %1$s</string>
+    <string name="opened_dual_date">ጎርጎርዮሳዊ፦ %1$s\nየኢትዮጵያ፦ %2$s\nየተከፈተበት ሰዓት፦ %3$s</string>
+    <string name="ethiopian_date_value">%1$s %2$d, %3$d</string>
+    <string-array name="ethiopian_months">
+        <item>መስከረም</item>
+        <item>ጥቅምት</item>
+        <item>ኅዳር</item>
+        <item>ታኅሣሥ</item>
+        <item>ጥር</item>
+        <item>የካቲት</item>
+        <item>መጋቢት</item>
+        <item>ሚያዝያ</item>
+        <item>ግንቦት</item>
+        <item>ሰኔ</item>
+        <item>ሐምሌ</item>
+        <item>ነሐሴ</item>
+        <item>ጳጉሜ</item>
+    </string-array>
+    <string name="show_all_tabs">ሁሉንም ሂሳቦች አሳይ</string>
+    <string name="closed_tab">የተዘጋ</string>
+    <string name="close_tab">ሂሳብ ዝጋ</string>
+    <string name="reopen_tab">ሂሳብ እንደገና ክፈት</string>
+    <string name="no_open_tabs">ክፍት ሂሳብ የለም። የተዘጉትን ለማየት ሁሉንም ሂሳቦች አሳይ የሚለውን ያብሩ።</string>
+    <string name="open_tabs_total">የክፍት ሂሳቦች ድምር · %1$d ሂሳቦች</string>
+    <string name="closed_tab_read_only">ይህ ሂሳብ ተዘግቷል። ዕቃዎችን ለመቀየር እንደገና ይክፈቱት።</string>
+    <string name="record_payment">ክፍያ መዝግብ</string>
+    <string name="payment_amount">የተቀበሉት መጠን</string>
+    <string name="payment_help">የተቀበሉትን መጠን እስከ 2 የአስርዮሽ ቦታዎች ያስገቡ። ቅድመ ክፍያው ቀሪውን ከሸፈነ 0 ያስገቡ።</string>
+    <string name="balance_due">ቀሪ ክፍያ፦ %1$s</string>
+    <string name="applied_payment">የተከፈለ / የተጠቀሙበት ቅድመ ክፍያ፦ %1$s</string>
+    <string name="customer_credit">የደንበኛው ቀሪ ቅድመ ክፍያ፦ %1$s</string>
+    <string name="remaining_after_payment">ከክፍያ በኋላ የሚቀር፦ %1$s</string>
+    <string name="credit_after_payment">ለቀጣይ ዕቃዎች የሚቀር ቅድመ ክፍያ፦ %1$s</string>
+    <string name="payment_closes_tab">ሙሉ በሙሉ ተከፍሏል። ይህ ሂሳብ ይዘጋል።</string>
+    <string name="payment_leaves_open">ከፊል ክፍያ ነው። ይህ ሂሳብ ክፍት ይቆያል።</string>
+    <string name="payment_history">የተቀበሉት ክፍያዎች</string>
+    <string name="payment_record">%1$s · %2$s</string>
+    <string name="payment_history_title">የክፍያ ታሪክ</string>
+    <string name="payments_total">ጠቅላላ የተቀበሉት ክፍያ</string>
+    <string name="no_payments">ገና ክፍያ አልተመዘገበም። የክፍትና የተዘጉ ሂሳቦች ክፍያዎች እዚህ ይታያሉ።</string>
+    <string name="received_amount">የተቀበሉት፦ %1$s</string>
+    <string name="payment_tab_name">ሂሳብ፦ %1$s</string>
+    <string name="payment_dual_date">ጎርጎርዮሳዊ፦ %1$s\nየኢትዮጵያ፦ %2$s\nየክፍያ ሰዓት፦ %3$s</string>
+    <string name="no_customers">ገና ደንበኞች የሉም። ለመጀመር የመጀመሪያ ደንበኛዎን ይመዝግቡ።</string>
+
+    <!-- Onboarding / FTUX Strings -->
+    <string name="onboarding_skip">ለፍ</string>
+    <string name="onboarding_next">ቀጥል</string>
+    <string name="onboarding_get_started">ጀምር</string>
+    <string name="onboarding_title_1">እንኳን ወደ ዱቤ ደብተር በደህና መጡ</string>
+    <string name="onboarding_desc_1">ዱቤ ደብተር የደንበኞችዎን የዱቤ ሂሳብ፣ ዕቃዎችና ክፍያዎች ያለ ምንም የሂሳብ ስህተት በዲጂታል መንገድ የሚያስተዳድሩበት ዘመናዊ መዝገብ ነው።</string>
+    <string name="onboarding_title_2">ደንበኞችን እና የዱቤ ሂሳቦችን ያቀላጥፉ</string>
+    <string name="onboarding_desc_2">ደንበኞችዎን ይመዝግቡ፣ የዕለታዊ ግዢ ሂሳቦችን ይክፈቱ እና ዕቃዎችን በዋጋቸው ይጨምሩ። የሂሳብ ድምርና የደንበኛ እዳ በራስ-ሰር ይሰላል።</string>
+    <string name="onboarding_title_3">የሁለት ዘመን አቆጣጠር ድጋፍ</string>
+    <string name="onboarding_desc_3">እያንዳንዱ የተከፈተ ሂሳብና የተቀበሉት ክፍያ በሁለቱም በጎርጎርዮሳዊ እና በኢትዮጵያ (ዓ.ም) የቀን አቆጣጠር በራስ-ሰር ይመዘገባል።</string>
+    <string name="onboarding_title_4">ክፍያዎችን ይመዝግቡ እና ሂሳብ ይዝጉ</string>
+    <string name="onboarding_desc_4">ከፊል ወይም ሙሉ ክፍያዎችን ይመዝግቡ። ሂሳቡ ሲከፈል በራስ-ሰር ይዘጋል፣ ትርፍ ክፍያ ለቀጣይ ግዢ ይቀመጣል፣ እና ሙሉ የክፍያ ታሪክ ይያዛል።</string>
+
+    <!-- Onboarding Illustration Strings -->
+    <string name="onboarding_illus_badge_dube">ዱቤ</string>
+    <string name="onboarding_illus_customer_name">አበበ ከበደ</string>
+    <string name="onboarding_illus_tab_info">ሂሳብ 1 · 3 ዕቃዎች</string>
+    <string name="onboarding_illus_groceries">የሳምንቱ ግዢ</string>
+    <string name="onboarding_illus_gregorian">ጎርጎርዮሳዊ</string>
+    <string name="onboarding_illus_ethiopian">ኢትዮጵያ 🇪🇹</string>
+    <string name="onboarding_illus_payment_received">ክፍያ ተቀብለዋል</string>
+    <string name="onboarding_illus_amount_paid">የተከፈለው፦</string>
+    <string name="onboarding_illus_balance_due">የሚፈለገው፦</string>
+
+    <!-- Coach Mark / Spotlight Strings -->
+    <string name="coach_mark_step_format">ደረጃ %1$d ከ %2$d</string>
+    <string name="coach_mark_skip">ጉብኝቱን ለፍ</string>
+    <string name="coach_mark_next">ቀጥል</string>
+    <string name="coach_mark_got_it">ተረዳሁ!</string>
+    <string name="coach_mark_title_1">ደንበኞችን ይመዝግቡ</string>
+    <string name="coach_mark_desc_1">መጀመሪያ ደንበኞችዎን ይመዝግቡ። የስልክ ቁጥርና ማስታወሻ ያስቀምጡ።</string>
+    <string name="coach_mark_title_2">የዱቤ ሂሳብ ይክፈቱ</string>
+    <string name="coach_mark_desc_2">ለዕለታዊ ግዢዎች ሂሳብ ይክፈቱ። ዕቃዎችን በብዛትና በዋጋቸው ይጨምሩ።</string>
+    <string name="coach_mark_title_3">ክፍያዎችንና ሂሳብ ይመዝግቡ</string>
+    <string name="coach_mark_desc_3">የተቀበሉትን ክፍያ ይመዝግቡ። የተከፈለ ሂሳብ በራስ-ሰር ይዘጋል፣ ትርፍ ክፍያ ለቀጣይ ይቀመጣል።</string>
+    <string name="coach_mark_title_4">ቋንቋና መመሪያ</string>
+    <string name="coach_mark_desc_4">ቋንቋዎችን በኢንግሊዘኛ፣ አማርኛ፣ ስልጤኛና ጉራጌኛ መካከል በማንኛውም ጊዜ ይቀይሩ።</string>
+
+    <!-- Overdue Alert & Reminder Strings -->
+    <string name="overdue_badge">ከ1 ወር በላይ የቆየ</string>
+    <string name="overdue_alert_title">ከ1 ወር በላይ የቆየ የዱቤ ሂሳብ</string>
+    <string name="overdue_alert_desc">ይህ ሂሳብ ከተከፈተ ከ1 ወር በላይ ሆኖታል፤ የሚፈለገውን ሂሳብ ለማስከፈል ደንበኛውን ያነጋግሩ።</string>
+    <string name="call_customer">ደንበኛውን ደውል</string>
+    <string name="send_sms_reminder">የኤስኤምኤስ (SMS) ማስታወሻ ላክ</string>
+    <string name="no_phone_warning">የስልክ ማስታወሻ ለመላክ የደንበኛውን ስልክ ቁጥር ያስገቡ።</string>
+    <string name="sms_reminder_template">ሰላም %1$s፣ ስለ \'%2$s\' የዱቤ ሂሳብዎ የተላከ ማስታወሻ ነው። የሚፈለግብዎት ሂሳብ፦ %3$s ብር። እናመሰግናለን!</string>
+</resources>

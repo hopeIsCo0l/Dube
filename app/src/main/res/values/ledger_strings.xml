@@ -1,0 +1,140 @@
+<resources>
+    <string name="customers">Customers</string>
+    <string name="back">Back</string>
+    <string name="choose_customer">Choose a customer to manage their tabs.</string>
+    <string name="register_customer">Register a customer</string>
+    <string name="tabs">Tabs</string>
+    <string name="no_tabs">No tabs yet. Open a tab to start adding items.</string>
+    <string name="opening">Opening…</string>
+    <string name="open_tab">Open a tab</string>
+    <string name="no_items">No items yet</string>
+    <string name="add_item_help">Add an item with its quantity and unit price. Totals are calculated for you.</string>
+    <string name="tap_edit">Tap to edit</string>
+    <string name="add_item">Add item</string>
+    <string name="tab_name">Tab name</string>
+    <string name="tab_example">e.g. Weekly groceries</string>
+    <string name="date_help">The opening date is shown in Gregorian and Ethiopian calendars.</string>
+    <string name="open_tab_confirm">Open tab</string>
+    <string name="cancel">Cancel</string>
+    <string name="customer_name">Customer name *</string>
+    <string name="name_required">Name is required.</string>
+    <string name="phone">Phone number (optional)</string>
+    <string name="memo">Memo (optional)</string>
+    <string name="saving">Saving…</string>
+    <string name="register">Register</string>
+    <string name="edit_item">Edit item</string>
+    <string name="item_name">Item name</string>
+    <string name="quantity">Quantity</string>
+    <string name="quantity_help">Greater than 0, up to 2 decimal places</string>
+    <string name="unit_price">Unit price</string>
+    <string name="price_help">0 or more, up to 2 decimal places</string>
+    <string name="delete_item">Delete item</string>
+    <string name="save_item">Save item</string>
+    <string name="delete_question">Delete item?</string>
+    <string name="delete">Delete</string>
+    <string name="load_error">Could not load records. Please reopen the app to try again.</string>
+    <string name="save_error">Could not save. Please try again.</string>
+    <string name="opened_date">Opened %1$s</string>
+    <string name="unknown_date">Existing items · opening date unknown</string>
+    <string name="customer_summary">%1$d tabs · Total %2$s</string>
+    <string name="tab_summary">%1$d items · Total %2$s</string>
+    <string name="grand_total">Grand total · %1$d tabs</string>
+    <string name="tab_total">Tab total · %1$d items</string>
+    <string name="item_number">Item %1$d</string>
+    <string name="quantity_value">Quantity: %1$s</string>
+    <string name="price_value">Unit price: %1$s</string>
+    <string name="total_value">Total: %1$s</string>
+    <string name="delete_message">Remove %1$s from this tab?</string>
+    <string name="phone_value">Phone: %1$s</string>
+    <string name="memo_value">Memo: %1$s</string>
+    <string name="opened_dual_date">Gregorian: %1$s\nEthiopian: %2$s\nOpened at %3$s</string>
+    <string name="ethiopian_date_value">%1$s %2$d, %3$d</string>
+    <string-array name="ethiopian_months">
+        <item>Meskerem</item>
+        <item>Tikimt</item>
+        <item>Hidar</item>
+        <item>Tahsas</item>
+        <item>Tir</item>
+        <item>Yekatit</item>
+        <item>Megabit</item>
+        <item>Miazia</item>
+        <item>Ginbot</item>
+        <item>Sene</item>
+        <item>Hamle</item>
+        <item>Nehase</item>
+        <item>Pagume</item>
+    </string-array>
+    <string name="show_all_tabs">Show all tabs</string>
+    <string name="closed_tab">Closed</string>
+    <string name="close_tab">Close tab</string>
+    <string name="reopen_tab">Reopen tab</string>
+    <string name="no_open_tabs">No open tabs. Turn on Show all tabs to view closed tabs.</string>
+    <string name="open_tabs_total">Open tabs total · %1$d tabs</string>
+    <string name="closed_tab_read_only">This tab is closed. Reopen it to change items.</string>
+    <string name="record_payment">Record payment</string>
+    <string name="payment_amount">Amount received</string>
+    <string name="payment_help">Enter the amount received, up to 2 decimal places. Enter 0 if credit covers the balance.</string>
+    <string name="balance_due">Balance due: %1$s</string>
+    <string name="applied_payment">Paid / credit applied: %1$s</string>
+    <string name="customer_credit">Available customer credit: %1$s</string>
+    <string name="remaining_after_payment">Balance after payment: %1$s</string>
+    <string name="credit_after_payment">Credit for future items: %1$s</string>
+    <string name="payment_closes_tab">Fully paid — this tab will close.</string>
+    <string name="payment_leaves_open">Partial payment — this tab will stay open.</string>
+    <string name="payment_history">Payments received</string>
+    <string name="payment_record">%1$s · %2$s</string>
+    <string name="payment_history_title">Payment history</string>
+    <string name="payments_total">Total payments received</string>
+    <string name="no_payments">No payments recorded yet. Payments from open and closed tabs will appear here.</string>
+    <string name="received_amount">Received: %1$s</string>
+    <string name="payment_tab_name">Tab: %1$s</string>
+    <string name="payment_dual_date">Gregorian: %1$s\nEthiopian: %2$s\nPayment time: %3$s</string>
+    <string name="no_customers">No customers yet. Register your first customer to get started.</string>
+
+    <!-- Onboarding / FTUX Strings -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_title_1">Welcome to Dube Debter</string>
+    <string name="onboarding_desc_1">Dube Debter is your smart digital credit notebook. Track customer tabs, unpaid items, and store credit easily with zero manual math required.</string>
+    <string name="onboarding_title_2">Manage Customers &amp; Credit Tabs</string>
+    <string name="onboarding_desc_2">Register your customers, open tabs for daily purchases, and add items with unit prices. Totals and customer balances update automatically.</string>
+    <string name="onboarding_title_3">Dual Ethiopian &amp; Gregorian Calendar</string>
+    <string name="onboarding_desc_3">Every tab and payment is automatically timestamped in both Gregorian and Ethiopian (ዓ.ም) calendars so you never lose track of dates.</string>
+    <string name="onboarding_title_4">Record Payments &amp; Close Tabs</string>
+    <string name="onboarding_desc_4">Record full or partial payments. Paid tabs automatically close, excess credit carries forward for future items, and full payment history is saved.</string>
+
+    <!-- Onboarding Illustration Strings -->
+    <string name="onboarding_illus_badge_dube">DUBE</string>
+    <string name="onboarding_illus_customer_name">Abebe Kebede</string>
+    <string name="onboarding_illus_tab_info">Tab 1 · 3 Items</string>
+    <string name="onboarding_illus_groceries">Weekly Groceries</string>
+    <string name="onboarding_illus_gregorian">Gregorian</string>
+    <string name="onboarding_illus_ethiopian">Ethiopian 🇪🇹</string>
+    <string name="onboarding_illus_payment_received">Payment Received</string>
+    <string name="onboarding_illus_amount_paid">Amount Paid:</string>
+    <string name="onboarding_illus_balance_due">Balance Due:</string>
+
+    <!-- Coach Mark / Spotlight Strings -->
+    <string name="coach_mark_step_format">Step %1$d of %2$d</string>
+    <string name="coach_mark_skip">Skip Tour</string>
+    <string name="coach_mark_next">Next</string>
+    <string name="coach_mark_got_it">Got it!</string>
+    <string name="coach_mark_title_1">Register Customers</string>
+    <string name="coach_mark_desc_1">Start by registering your customers. Keep their contact info and notes handy.</string>
+    <string name="coach_mark_title_2">Open Credit Tabs</string>
+    <string name="coach_mark_desc_2">Open a tab for daily purchases. Add items with quantity and unit prices.</string>
+    <string name="coach_mark_title_3">Record Payments &amp; Balances</string>
+    <string name="coach_mark_desc_3">Record received payments. Paid tabs close automatically and remaining credit carries over.</string>
+    <string name="coach_mark_title_4">Language &amp; Guide</string>
+    <string name="coach_mark_desc_4">Switch languages anytime between English, አማርኛ, ስልጤኛ, and ጉራጌኛ, or replay the guide.</string>
+
+    <!-- Overdue Alert & Reminder Strings -->
+    <string name="overdue_badge">Overdue &gt; 30 Days</string>
+    <string name="overdue_alert_title">Overdue Tab Alert (&gt; 30 Days)</string>
+    <string name="overdue_alert_desc">This tab has been open for over 30 days. Please reach out to collect the balance due.</string>
+    <string name="call_customer">Call Customer</string>
+    <string name="send_sms_reminder">Send SMS Reminder</string>
+    <string name="no_phone_warning">Add customer phone number to call or send SMS reminders.</string>
+    <string name="sms_reminder_template">Hello %1$s, this is a friendly reminder from Dube Debter regarding your tab \'%2$s\'. Balance due: %3$s ETB. Thank you!</string>
+</resources>
