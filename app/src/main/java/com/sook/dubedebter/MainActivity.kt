@@ -416,6 +416,7 @@ private fun CustomerApp(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             error?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error) }
+            ExportReportAction(customers = customers, customer = customer, enabled = loaded && !saving)
             if (!loaded) {
                 if (error == null) CircularProgressIndicator()
             } else if (customer == null) {
