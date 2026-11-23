@@ -83,11 +83,13 @@ internal object ImageReportWriter {
         }
         try {
             report.sheets.forEach { sheet ->
+                val rows = sheet.rows().iterator()
+                if (!rows.hasNext()) return@forEach
                 section = sheet.name
                 newPage()
                 paragraph(report.scope, heading = true)
                 var count = 0
-                sheet.rows().forEach { values ->
+                rows.forEach { values ->
                     if (sheet.name == "Summary") {
                         paragraph("${values[0]}: ${reportValue(values[1])}")
                     } else {
@@ -100,7 +102,6 @@ internal object ImageReportWriter {
                         paragraph(detail)
                     }
                 }
-                if (count == 0 && sheet.name != "Summary") paragraph("No records.")
             }
             finishPage()
             return files

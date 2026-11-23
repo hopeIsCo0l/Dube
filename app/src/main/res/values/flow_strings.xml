@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="more_options">More options</string>
+    <string name="language_setting">Language · %1$s</string>
+    <string name="quick_guide">Quick guide</string>
+    <string name="feature_tour">Feature tour</string>
+    <string name="export_customer_action">Export this customer</string>
+    <string name="export_ledger_action">Export whole ledger</string>
+    <string name="search_customer_hint">Search name or phone</string>
+    <string name="clear_search_action">Clear search</string>
+    <string name="no_search_results">No matching customers.</string>
+    <string name="customer_details">Contact details and notes</string>
+    <string name="tab_details">Tab details</string>
+    <string name="open_tabs_filter">Open tabs</string>
+    <string name="all_tabs_filter">All tabs</string>
+    <string name="items_heading">Items</string>
+    <string name="payment_saved">Payment recorded</string>
+    <string name="item_saved">Tab updated</string>
+    <string name="customer_saved">Customer registered</string>
+    <string name="export_language_note">Report headings are in English.</string>
+    <string name="export_includes">Includes all tabs, items, payments and customer notes.</string>
+    <string name="no_open_tabs_filter">No open tabs. Choose All tabs to view closed tabs.</string>
+</resources>

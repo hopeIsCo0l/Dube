@@ -1,7 +1,5 @@
 package com.sook.dubedebter
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -16,10 +14,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,12 +48,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun CustomerTab.openedLabel(): String =
+internal fun CustomerTab.openedLabel(): String =
     openedAt?.let { dualDateLabel(it, R.string.opened_dual_date) }
         ?: stringResource(R.string.unknown_date)
 
 @Composable
-private fun dualDateLabel(timestamp: Long, labelResource: Int): String {
+internal fun dualDateLabel(timestamp: Long, labelResource: Int): String {
     val locale = LocalConfiguration.current.localesCompat()
     return timestamp.let { timestamp ->
         val zone = TimeZone.getDefault()
@@ -257,15 +254,17 @@ private fun CustomerApp(
     var register by rememberSaveable { mutableStateOf(false) }
     var editorOpen by rememberSaveable { mutableStateOf(false) }
     var editingId by rememberSaveable { mutableStateOf<String?>(null) }
-    var languageMenuExpanded by remember { mutableStateOf(false) }
+    var exportOpen by rememberSaveable(selectedId) { mutableStateOf(false) }
+    val snackbar = remember { SnackbarHostState() }
+    val screenStates = rememberSaveableStateHolder()
+    val paymentSaved = stringResource(R.string.payment_saved)
+    val itemSaved = stringResource(R.string.item_saved)
+    val customerSaved = stringResource(R.string.customer_saved)
     var coachMarkStep by rememberSaveable { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(Unit) {
         try {
             val prefs = context.getSharedPreferences("customer_ledger", 0)
-            if (!prefs.getBoolean("coach_marks_shown", false)) {
-                coachMarkStep = 0
-            }
             customers = withContext(Dispatchers.IO) {
                 val json = prefs.getString("customers", null)
                 if (json == null) emptyList() else decode(json)
@@ -300,7 +299,6 @@ private fun CustomerApp(
 
     val customer = customers.firstOrNull { it.id == selectedId }
     val tab = customer?.tabs?.firstOrNull { it.id == selectedTabId }
-    val visibleTabs = customer?.tabs?.visibleTabs(showAllTabs).orEmpty()
     fun goBack() {
         if (historyOpen) historyOpen = false
         else if (selectedTabId != null) selectedTabId = null else selectedId = null
@@ -310,104 +308,32 @@ private fun CustomerApp(
         val updated = customer.updateTabItems(tab.id, items)
         save(customers.map { if (it.id == customer.id) updated else it }) {
             editorOpen = false
-            if (updated.tabs.first { it.id == tab.id }.closed) selectedTabId = null
+            scope.launch { snackbar.showSnackbar(itemSaved) }
         }
     }
-    var helpMenuExpanded by remember { mutableStateOf(false) }
 
-    BackHandler(customer != null && !editorOpen && !openingTab && !paymentOpen) { if (!saving) goBack() }
+    BackHandler(customer != null && !editorOpen && !openingTab && !paymentOpen && !exportOpen && !register) { if (!saving) goBack() }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
+            snackbarHost = { SnackbarHost(snackbar) },
             topBar = {
                 TopAppBar(
-                    title = { Text(if (historyOpen) stringResource(R.string.payment_history_title) else tab?.name ?: customer?.name ?: stringResource(R.string.customers)) },
+                    title = { Text(if (historyOpen) stringResource(R.string.payment_history_title) else tab?.name ?: customer?.name ?: stringResource(R.string.customers), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                     navigationIcon = {
                         if (customer != null) TextButton(enabled = !saving, onClick = { goBack() }) { Text(stringResource(R.string.back)) }
                     },
                     actions = {
-                        Box {
-                            IconButton(onClick = { helpMenuExpanded = true }) {
-                                Surface(
-                                    shape = CircleShape,
-                                    color = MaterialTheme.colorScheme.primaryContainer,
-                                    modifier = Modifier.size(28.dp)
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Text(
-                                            text = "?",
-                                            style = MaterialTheme.typography.titleSmall,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                                        )
-                                    }
-                                }
-                            }
-                            DropdownMenu(
-                                expanded = helpMenuExpanded,
-                                onDismissRequest = { helpMenuExpanded = false }
-                            ) {
-                                DropdownMenuItem(
-                                    text = { Text("Guide / Onboarding") },
-                                    onClick = {
-                                        helpMenuExpanded = false
-                                        onShowOnboarding()
-                                    }
-                                )
-                                DropdownMenuItem(
-                                    text = { Text("Feature Tour / Coach Marks") },
-                                    onClick = {
-                                        helpMenuExpanded = false
-                                        coachMarkStep = 0
-                                    }
-                                )
-                            }
-                        }
-                    Box {
-                        val currentLangLabel = when (language) {
-                            "am" -> "አማርኛ"
-                            "stv" -> "ስልጤኛ"
-                            "sgw" -> "ጉራጌኛ"
-                            else -> "English"
-                        }
-                        TextButton(onClick = { languageMenuExpanded = true }) {
-                            Text(currentLangLabel)
-                        }
-                        DropdownMenu(
-                            expanded = languageMenuExpanded,
-                            onDismissRequest = { languageMenuExpanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text("English") },
-                                onClick = {
-                                    onLanguageChange("en")
-                                    languageMenuExpanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("አማርኛ (Amharic)") },
-                                onClick = {
-                                    onLanguageChange("am")
-                                    languageMenuExpanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("ስልጤኛ (Silt'e)") },
-                                onClick = {
-                                    onLanguageChange("stv")
-                                    languageMenuExpanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("ጉራጌኛ (Gurage)") },
-                                onClick = {
-                                    onLanguageChange("sgw")
-                                    languageMenuExpanded = false
-                                }
-                            )
-                        }
+                        LedgerAppMenu(
+                            language = language, enabled = !saving,
+                            canExport = loaded && customers.isNotEmpty(),
+                            customerSelected = customer != null,
+                            onExport = { exportOpen = true },
+                            onLanguageChange = onLanguageChange,
+                            onGuide = onShowOnboarding,
+                            onTour = { coachMarkStep = 0 }
+                        )
                     }
-                }
             )
         }
     ) { padding ->
@@ -416,271 +342,54 @@ private fun CustomerApp(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             error?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error) }
-            ExportReportAction(customers = customers, customer = customer, enabled = loaded && !saving)
+            Box(Modifier.weight(1f)) {
+                val screenKey = when {
+                    customer == null -> "customers"
+                    historyOpen -> "history:${customer.id}"
+                    tab == null -> "customer:${customer.id}"
+                    else -> "tab:${tab.id}"
+                }
+                screenStates.SaveableStateProvider(screenKey) {
             if (!loaded) {
                 if (error == null) CircularProgressIndicator()
             } else if (customer == null) {
-                Text(stringResource(if (customers.isEmpty()) R.string.no_customers else R.string.choose_customer), style = MaterialTheme.typography.bodyMedium)
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    itemsIndexed(customers.asReversed(), key = { _, entry -> entry.id }) { _, entry ->
-                        OutlinedCard(onClick = { selectedId = entry.id; selectedTabId = null }, modifier = Modifier.fillMaxWidth()) {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(entry.name, style = MaterialTheme.typography.titleMedium)
-                                    if (entry.hasOverdueTabs) OverdueBadge()
-                                }
-                                if (entry.phone.isNotBlank()) Text(entry.phone, style = MaterialTheme.typography.bodyMedium)
-                                Text(stringResource(R.string.balance_due, entry.balance.display()))
-                                if (entry.credit > BigDecimal.ZERO) Text(stringResource(R.string.customer_credit, entry.credit.display()))
-                                Text(
-                                    stringResource(R.string.customer_summary, entry.tabs.size, entry.tabs.fold(BigDecimal.ZERO) { sum, tab -> sum + tab.total }.display()),
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                            }
-                        }
-                    }
-                    item {
-                        Button(onClick = { register = true }, modifier = Modifier.fillMaxWidth()) {
-                            Text(stringResource(R.string.register_customer))
-                        }
-                    }
-                }
+                CustomerListScreen(customers, saving,
+                    onRegister = { register = true },
+                    onSelect = { selectedId = it; selectedTabId = null })
             } else if (historyOpen) {
                 CustomerPaymentHistory(customer)
             } else if (tab == null) {
-                OutlinedButton(
-                    onClick = { historyOpen = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) { Text(stringResource(R.string.payment_history_title)) }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(stringResource(R.string.show_all_tabs), modifier = Modifier.weight(1f))
-                    Switch(checked = showAllTabs, onCheckedChange = { showAllTabs = it })
-                }
-                Text(stringResource(R.string.tabs), style = MaterialTheme.typography.titleLarge)
-                Text(stringResource(R.string.customer_credit, customer.credit.display()))
-                LazyColumn(
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(bottom = 12.dp)
-                ) {
-                    if (customer.phone.isNotBlank() || customer.memo.isNotBlank()) {
-                        item {
-                            Card(Modifier.fillMaxWidth()) {
-                                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    if (customer.phone.isNotBlank()) Text(stringResource(R.string.phone_value, customer.phone))
-                                    if (customer.memo.isNotBlank()) Text(stringResource(R.string.memo_value, customer.memo))
-                                }
-                            }
-                        }
-                    }
-                    if (visibleTabs.isEmpty()) {
-                        item {
-                            Text(stringResource(if (customer.tabs.isEmpty()) R.string.no_tabs else R.string.no_open_tabs))
-                        }
-                    }
-                    itemsIndexed(visibleTabs, key = { _, entry -> entry.id }) { _, entry ->
-                        OutlinedCard(onClick = { selectedTabId = entry.id }, modifier = Modifier.fillMaxWidth()) {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(entry.name, style = MaterialTheme.typography.titleLarge)
-                                    if (entry.isOverdue) OverdueBadge()
-                                    else if (entry.closed) ClosedTabBadge()
-                                }
-                                Text(entry.openedLabel(), style = MaterialTheme.typography.bodyMedium)
-                                Text(stringResource(R.string.tab_summary, entry.items.size, entry.total.display()))
-                                Text(stringResource(R.string.balance_due, entry.balance.display()))
-                            }
-                        }
-                    }
-                }
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(if (showAllTabs) R.string.grand_total else R.string.open_tabs_total, visibleTabs.size),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                        Text(
-                            visibleTabs.fold(BigDecimal.ZERO) { sum, entry -> sum + entry.total }.display(),
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        Button(
-                            enabled = !saving,
-                            onClick = { openingTab = true },
-                            modifier = Modifier.fillMaxWidth()
-                        ) { Text(stringResource(if (saving) R.string.opening else R.string.open_tab)) }
-                    }
-                }
-                Spacer(Modifier.height(4.dp))
+                CustomerTabsScreen(customer, showAllTabs, saving,
+                    onShowAll = { showAllTabs = it },
+                    onOpen = { openingTab = true },
+                    onSelect = { selectedTabId = it },
+                    onHistory = { historyOpen = true })
             } else {
-                Text(customer.name, style = MaterialTheme.typography.titleMedium)
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (tab.isOverdue) OverdueBadge()
-                    else if (tab.closed) ClosedTabBadge()
+                TabDetailScreen(customer, tab, saving,
+                    onAdd = { editingId = null; editorOpen = true },
+                    onEdit = { editingId = it; editorOpen = true },
+                    onPayment = { paymentOpen = true },
+                    onReopen = {
+                        save(customers.map { entry ->
+                            if (entry.id == customer.id) entry.copy(tabs = entry.tabs.map {
+                                if (it.id == tab.id) it.copy(closed = false) else it
+                            }) else entry
+                        }) {}
+                    })
+            }
                 }
-                Text(tab.openedLabel(), style = MaterialTheme.typography.bodyMedium)
-
-                if (tab.isOverdue) {
-                    val currentContext = LocalContext.current
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(stringResource(R.string.overdue_alert_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(stringResource(R.string.overdue_alert_desc), style = MaterialTheme.typography.bodyMedium)
-                            if (customer.phone.isNotBlank()) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Button(
-                                        onClick = {
-                                            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${customer.phone.trim()}"))
-                                            currentContext.startActivity(intent)
-                                        },
-                                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        Text(stringResource(R.string.call_customer))
-                                    }
-                                    val smsTemplate = stringResource(R.string.sms_reminder_template)
-                                    OutlinedButton(
-                                        onClick = {
-                                            val message = String.format(smsTemplate, customer.name, tab.name, tab.balance.display())
-                                            val uri = Uri.parse("smsto:${customer.phone.trim()}")
-                                            val intent = Intent(Intent.ACTION_SENDTO, uri).apply {
-                                                putExtra("sms_body", message)
-                                            }
-                                            currentContext.startActivity(intent)
-                                        },
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        Text(stringResource(R.string.send_sms_reminder))
-                                    }
-                                }
-                            } else {
-                                Text(stringResource(R.string.no_phone_warning), style = MaterialTheme.typography.labelMedium)
-                            }
-                        }
-                    }
-                }
-                LazyColumn(
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(bottom = 12.dp)
-                ) {
-                    if (tab.items.isEmpty()) {
-                        item {
-                            Card(Modifier.fillMaxWidth()) {
-                                Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text(stringResource(R.string.no_items), style = MaterialTheme.typography.titleLarge)
-                                    Text(stringResource(if (tab.closed) R.string.closed_tab_read_only else R.string.add_item_help))
-                                }
-                            }
-                        }
-                    }
-                    if (tab.payments.isNotEmpty()) {
-                        item { Text(stringResource(R.string.payment_history), style = MaterialTheme.typography.titleMedium) }
-                        itemsIndexed(tab.payments.asReversed(), key = { _, payment -> payment.id }) { _, payment ->
-                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(stringResource(R.string.received_amount, payment.amount.display()))
-                                Text(dualDateLabel(payment.recordedAt, R.string.payment_dual_date))
-                            }
-                        }
-                    }
-                    itemsIndexed(tab.items.asReversed(), key = { _, item -> item.id }) { index, item ->
-                        OutlinedCard(
-                            enabled = !tab.closed && !saving,
-                            onClick = { editingId = item.id; editorOpen = true },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                Text(stringResource(R.string.item_number, tab.items.size - index), style = MaterialTheme.typography.labelMedium)
-                                Text(item.name, style = MaterialTheme.typography.titleLarge)
-                                Text(stringResource(R.string.quantity_value, item.quantity.display()), style = MaterialTheme.typography.bodyMedium)
-                                Text(stringResource(R.string.price_value, item.price.display()), style = MaterialTheme.typography.bodyMedium)
-                                HorizontalDivider()
-                                Text(stringResource(R.string.total_value, item.total.display()), style = MaterialTheme.typography.titleMedium)
-                                if (!tab.closed) Text(stringResource(R.string.tap_edit), style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.primary)
-                            }
-                        }
-                    }
-                }
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(stringResource(R.string.tab_total, tab.items.size), style = MaterialTheme.typography.labelLarge)
-                        Text(tab.total.display(),
-                            style = MaterialTheme.typography.headlineMedium)
-                        Text(stringResource(R.string.applied_payment, tab.paid.display()))
-                        Text(stringResource(R.string.balance_due, tab.balance.display()))
-                        Text(stringResource(R.string.customer_credit, customer.credit.display()))
-                        if (!tab.closed) {
-                            Button(
-                                enabled = !saving,
-                                onClick = { editingId = null; editorOpen = true },
-                                modifier = Modifier.fillMaxWidth()
-                            ) { Text(stringResource(R.string.add_item)) }
-                        } else {
-                            Text(stringResource(R.string.closed_tab_read_only))
-                        }
-                        OutlinedButton(
-                            enabled = !saving,
-                            onClick = {
-                                if (tab.closed) {
-                                    save(customers.map { entry ->
-                                        if (entry.id == customer.id) entry.copy(tabs = entry.tabs.map {
-                                            if (it.id == tab.id) it.copy(closed = false) else it
-                                        }) else entry
-                                    }) {}
-                                } else paymentOpen = true
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(
-                                if (saving) R.string.saving
-                                else if (tab.closed) R.string.reopen_tab else R.string.close_tab
-                            ))
-                        }
-                    }
-                }
-                Spacer(Modifier.height(4.dp))
             }
         }
     }
+
+    if (exportOpen) ExportReportDialog(customers, customer, onDismiss = { exportOpen = false })
 
     if (paymentOpen && customer != null && tab != null && !tab.closed) {
         PaymentDialog(customer, tab, saving, error, onDismiss = { paymentOpen = false }) { payment ->
             val updated = customer.recordPayment(tab.id, payment)
             save(customers.map { if (it.id == customer.id) updated else it }) {
                 paymentOpen = false
-                if (updated.tabs.first { it.id == tab.id }.closed) selectedTabId = null
+                scope.launch { snackbar.showSnackbar(paymentSaved) }
             }
         }
     }
@@ -757,7 +466,13 @@ private fun CustomerApp(
             },
             confirmButton = {
                 TextButton(enabled = name.isNotBlank() && !saving, onClick = {
-                    save(customers + Customer(name = name.trim(), phone = phone.trim(), memo = memo.trim())) { register = false }
+                    val registered = Customer(name = name.trim(), phone = phone.trim(), memo = memo.trim())
+                    save(customers + registered) {
+                        register = false
+                        selectedId = registered.id
+                        selectedTabId = null
+                        scope.launch { snackbar.showSnackbar(customerSaved) }
+                    }
                 }) { Text(stringResource(if (saving) R.string.saving else R.string.register)) }
             },
             dismissButton = {
@@ -808,12 +523,12 @@ private fun CustomerApp(
 @Composable
 private fun CustomerPaymentHistory(customer: Customer) {
     val history = remember(customer) { customer.paymentHistory() }
-    Text(customer.name, style = MaterialTheme.typography.titleMedium)
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
+        item { Text(customer.name, style = MaterialTheme.typography.titleMedium) }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -841,7 +556,7 @@ private fun CustomerPaymentHistory(customer: Customer) {
 }
 
 @Composable
-private fun OverdueBadge() {
+internal fun OverdueBadge() {
     Surface(
         color = MaterialTheme.colorScheme.errorContainer,
         contentColor = MaterialTheme.colorScheme.onErrorContainer,
@@ -857,10 +572,10 @@ private fun OverdueBadge() {
 }
 
 @Composable
-private fun ClosedTabBadge() {
+internal fun ClosedTabBadge() {
     Surface(
-        color = Color(0xFFFFDAD6),
-        contentColor = Color(0xFF93000A),
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         shape = MaterialTheme.shapes.small
     ) {
         Text(

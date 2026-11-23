@@ -47,6 +47,16 @@ class ReportExportInstrumentedTest {
         }
     }
 
+    @Test fun emptyReportDoesNotGenerateEmptySectionImages() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val folder = File(context.cacheDir, "reports/test-${UUID.randomUUID()}").apply { mkdirs() }
+        try {
+            assertEquals(1, ImageReportWriter.write(LedgerReport(emptyList(), "Empty ledger"), folder).size)
+        } finally {
+            folder.deleteRecursively()
+        }
+    }
+
     @Test fun imageExportStopsOnCancellation() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val folder = File(context.cacheDir, "reports/test-${UUID.randomUUID()}").apply { mkdirs() }

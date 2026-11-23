@@ -6,11 +6,11 @@
     <string name="export_everyone">Whole ledger · %1$d customers</string>
     <string name="export_format">Choose a format</string>
     <string name="export_excel">Excel workbook (.xlsx)</string>
-    <string name="export_excel_detail">Five organized sheets with filters: summary, customers, tabs, items and payments.</string>
+    <string name="export_excel_detail">One workbook with five organized sheets.</string>
     <string name="export_images">Images (.png)</string>
-    <string name="export_images_detail">Readable, numbered pages containing the full report. Large reports may produce many images.</string>
+    <string name="export_images_detail">Numbered image pages for easy sharing.</string>
     <string name="export_details">Includes all open and closed tabs, contact details, notes, items, balances, credit and recorded payments. Report headings are in English.</string>
-    <string name="export_continue">Create and share</string>
+    <string name="export_continue">Share report</string>
     <string name="export_creating">Preparing your report…</string>
     <string name="export_failed">Could not create or share this report. Check free storage and try again.</string>
     <string name="export_image_limit">This report needs more than 100 image pages. Choose Excel or export one customer.</string>

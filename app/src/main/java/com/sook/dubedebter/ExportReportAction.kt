@@ -27,46 +27,29 @@ import java.io.File
 import java.util.UUID
 
 @Composable
-internal fun ExportReportAction(customers: List<Customer>, customer: Customer?, enabled: Boolean) {
+internal fun ExportReportDialog(customers: List<Customer>, customer: Customer?, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val allTitle = stringResource(R.string.export_all_title)
     val customerTitle = stringResource(R.string.export_customer_title, customer?.name.orEmpty())
     val chooserTitle = stringResource(R.string.export_report)
     val scope = rememberCoroutineScope()
-    var open by rememberSaveable { mutableStateOf(false) }
-    var wholeLedger by rememberSaveable(customer?.id) { mutableStateOf(customer == null) }
     var images by rememberSaveable { mutableStateOf(false) }
     var working by remember { mutableStateOf(false) }
     var failure by remember { mutableStateOf<Int?>(null) }
 
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-        TextButton(enabled = enabled && !working, onClick = { failure = null; open = true }) {
-            Text(stringResource(R.string.export_report))
-        }
-    }
-
-    if (open) AlertDialog(
-        onDismissRequest = { if (!working) open = false },
+    // Dismissing removes this composition and cancels its export coroutine.
+    AlertDialog(
+        onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.export_report)) },
         text = {
             Column(
                 Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stringResource(R.string.export_scope), style = MaterialTheme.typography.titleSmall)
-                Column(Modifier.selectableGroup()) {
-                    if (customer != null) ExportChoice(
-                        stringResource(R.string.export_customer, customer.name),
-                        selected = !wholeLedger, enabled = !working,
-                        onClick = { wholeLedger = false }
-                    )
-                    ExportChoice(
-                        stringResource(R.string.export_everyone, customers.size),
-                        selected = wholeLedger, enabled = !working,
-                        onClick = { wholeLedger = true }
-                    )
-                }
-                HorizontalDivider()
+                Text(if (customer == null) stringResource(R.string.export_everyone, customers.size)
+                    else customerTitle, style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.export_includes), style = MaterialTheme.typography.bodySmall)
+                if (!working) {
                 Text(stringResource(R.string.export_format), style = MaterialTheme.typography.titleSmall)
                 Column(Modifier.selectableGroup()) {
                     ExportChoice(
@@ -80,7 +63,8 @@ internal fun ExportReportAction(customers: List<Customer>, customer: Customer?, 
                         selected = images, enabled = !working, onClick = { images = true }
                     )
                 }
-                Text(stringResource(R.string.export_details), style = MaterialTheme.typography.bodySmall)
+                }
+                Text(stringResource(R.string.export_language_note), style = MaterialTheme.typography.bodySmall)
                 if (working) {
                     LinearProgressIndicator(Modifier.fillMaxWidth())
                     Text(stringResource(R.string.export_creating))
@@ -89,10 +73,10 @@ internal fun ExportReportAction(customers: List<Customer>, customer: Customer?, 
             }
         },
         confirmButton = {
-            TextButton(enabled = !working && enabled, onClick = {
+            Button(enabled = !working, onClick = {
                 // Capture the scope before suspending, including closed tabs and hidden history.
-                val snapshot = if (wholeLedger || customer == null) customers.toList() else listOf(customer)
-                val title = if (wholeLedger || customer == null) allTitle else customerTitle
+                val snapshot = if (customer == null) customers.toList() else listOf(customer)
+                val title = if (customer == null) allTitle else customerTitle
                 val imageFormat = images
                 working = true
                 failure = null
@@ -138,7 +122,7 @@ internal fun ExportReportAction(customers: List<Customer>, customer: Customer?, 
                         context.startActivity(Intent.createChooser(intent, chooserTitle)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                         shared = true
-                        open = false
+                        onDismiss()
                     } catch (cancelled: CancellationException) {
                         throw cancelled
                     } catch (_: ImageReportTooLarge) {
@@ -155,7 +139,7 @@ internal fun ExportReportAction(customers: List<Customer>, customer: Customer?, 
             }) { Text(stringResource(R.string.export_continue)) }
         },
         dismissButton = {
-            TextButton(enabled = !working, onClick = { open = false }) {
+            TextButton(onClick = onDismiss) {
                 Text(stringResource(R.string.cancel))
             }
         }
